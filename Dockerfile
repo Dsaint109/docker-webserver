@@ -54,6 +54,26 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
     php7 -r "unlink('composer-setup.php');" && \
     ln -s /usr/bin/php7 /usr/bin/php
 
+##################  UPDATING TO PHP7.2  ###################
+
+# trust this project public key to trust the packages.
+ADD https://php.codecasts.rocks/php-alpine.rsa.pub /etc/apk/keys/php-alpine.rsa.pub
+
+# make sure you can use HTTPS
+RUN apk --update add ca-certificates
+
+# add the repository, make sure you replace the correct versions if you want.
+RUN echo "@php https://php.codecasts.rocks/v3.7/php-7.2" >> /etc/apk/repositories
+
+# install php and some extensions
+# notice the @php is required to avoid getting default php packages from alpine instead.
+RUN apk add --update php7@php
+RUN apk add --update php7-pdo@php
+RUN apk add --update php7-curl@php
+RUN apk add --update php7-zlib@php
+RUN apk add --update php7-mcrypt@php
+RUN apk add --update php7-mbstring@php
+
 ##################  INSTALLATION ENDS  ##################
 
 ##################  CONFIGURATION STARTS  ##################
